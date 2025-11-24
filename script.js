@@ -1,83 +1,60 @@
-// script.js
-
-// 🐶 主邏輯：按下按鈕時呼叫
 function calculateDogAge() {
-  const name = document.getElementById("dogName").value.trim();
-  const dob = document.getElementById("dob").value;
-  const size = document.getElementById("size").value;
-  const result = document.getElementById("result");
+  const name = document.getElementById('dogName').value || "你的狗狗";
+  const dob = new Date(document.getElementById('dob').value);
+  const size = document.getElementById('size').value;
 
-  // 清空結果
-  result.innerHTML = "";
-
-  // ➤ 基本檢查
-  if (!dob) {
-    result.innerHTML = `<p style="color:crimson;">請輸入出生日期</p>`;
+  if (!dob.getTime()) {
+    alert("請輸入正確的出生日期！");
     return;
   }
 
-  // ➤ 計算實際年齡（以年為單位）
-  const birthDate = new Date(dob);
+  // 計算狗狗實際年齡
   const today = new Date();
+  let dogAge = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  const dayDiff = today.getDate() - dob.getDate();
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) dogAge--;
 
-  const diffMs = today - birthDate;
-  const ageYears = diffMs / (1000 * 60 * 60 * 24 * 365.25); // 以年為單位
-
-  if (ageYears < 0) {
-    result.innerHTML = `<p style="color:crimson;">出生日期不能是未來！</p>`;
-    return;
+  // 依據體型換算人類年齡
+  let humanAge;
+  if (size === "small") {
+    humanAge = 16 * Math.log(dogAge) + 31;
+  } else if (size === "medium") {
+    humanAge = 14 * Math.log(dogAge) + 32;
+  } else { // large
+    humanAge = 12 * Math.log(dogAge) + 34;
   }
 
-  // ➤ 換算成「人類年齡」
-  const humanAge = convertToHumanAge(ageYears, size);
+  humanAge = humanAge < 0 ? 0 : Math.round(humanAge);
 
-  // ➤ 顯示結果
-  const dogNameDisplay = name ? `${name} 的` : "你的狗狗";
-
-  result.innerHTML = `
-    <div class="result-box">
-      <h3>🐕 ${dogNameDisplay} 年齡計算結果</h3>
-      <p>實際年齡：約 <strong>${ageYears.toFixed(1)}</strong> 歲</p>
-      <p>換算成人類年齡：約 <strong>${humanAge}</strong> 歲</p>
-    </div>
+  // 顯示結果
+  const resultText = `
+    <strong>${name}的狗狗年齡：</strong> ${dogAge} 歲<br>
+    <strong>換算成人類年齡：</strong> ${humanAge} 歲
   `;
+  document.getElementById('result').innerHTML = resultText;
+
+  // 儲存到 localStorage
+  localStorage.setItem('lastResult', JSON.stringify({
+    name: name,
+    dob: document.getElementById('dob').value,
+    size: size,
+    dogAge: dogAge,
+    humanAge: humanAge
+  }));
 }
 
-// 🧠 年齡換算邏輯（依體型）
-function convertToHumanAge(age, size) {
-  // 參考：UCSD 甲基化研究 + AVMA 體型影響
-  // 數值使用常見簡化版（方便前端使用）
-  if (age <= 0) return 0;
-
-  let baseHuman;
-
-  // 第一階段：前 2 年共通
-  if (age <= 1) {
-    baseHuman = 15 * age; // 第一年 = 15 人歲
-  } else if (age <= 2) {
-    baseHuman = 15 + (age - 1) * 9; // 第二年 = +9 人歲
-  } else {
-    // 第三年之後依體型差異
-    let extraRate;
-    switch (size) {
-      case "small":
-        extraRate = 4; // 小型犬走慢
-        break;
-      case "medium":
-        extraRate = 5;
-        break;
-      case "large":
-        extraRate = 6; // 大型犬老化較快
-        break;
-    }
-
-    baseHuman = 15 + 9 + (age - 2) * extraRate;
+// 頁面載入時，顯示上一次運算結果
+window.addEventListener('load', () => {
+  const lastResult = JSON.parse(localStorage.getItem('lastResult'));
+  if (lastResult) {
+    document.getElementById('dogName').value = lastResult.name;
+    document.getElementById('dob').value = lastResult.dob;
+    document.getElementById('size').value = lastResult.size;
+    document.getElementById('result').innerHTML = `
+      <strong>${lastResult.name}的狗狗年齡：</strong> ${lastResult.dogAge} 歲<br>
+      <strong>換算成人類年齡：</strong> ${lastResult.humanAge} 歲
+    `;
   }
-
-  return Math.round(baseHuman);
-}
-
-// ✔ 讓 Enter 也能觸發計算（UX 加強）
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") calculateDogAge();
 });
+
