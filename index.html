@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>寵物年齡計算器(狗狗)</title>
-  <link rel="stylesheet" href="style.css" />
+  <!-- 使用相對路徑 ./，確保 GitHub Pages 可正確讀取 -->
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <div class="calculator">
@@ -27,6 +28,7 @@
     <button id="clearBtn" onclick="clearLastResult()">清除上次結果</button>
 
     <div id="result"></div>
+    <div id="loadMsg" style="text-align:center;color:#ff6f61;margin-top:5px;"></div>
 
     <div class="features">
       <h3>功能特色 🎉</h3>
@@ -39,6 +41,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>

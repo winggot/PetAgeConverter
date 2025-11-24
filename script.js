@@ -42,6 +42,8 @@ function calculateDogAge() {
     dogAge,
     humanAge
   }));
+
+  document.getElementById('loadMsg').innerText = "✅ 計算完成，結果已儲存！";
 }
 
 function clearLastResult() {
@@ -50,6 +52,7 @@ function clearLastResult() {
   document.getElementById('dob').value = '';
   document.getElementById('size').value = 'small';
   document.getElementById('result').innerHTML = '';
+  document.getElementById('loadMsg').innerText = "❌ 上次結果已清除";
 }
 
 window.addEventListener('load', () => {
@@ -62,5 +65,6 @@ window.addEventListener('load', () => {
       <strong>${lastResult.name}的狗狗年齡：</strong> ${lastResult.dogAge} 歲<br>
       <strong>換算成人類年齡：</strong> ${lastResult.humanAge} 歲
     `;
+    document.getElementById('loadMsg').innerText = "ℹ️ 已載入上次結果！";
   }
 });
