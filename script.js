@@ -1,50 +1,57 @@
 function calculateDogAge() {
   const name = document.getElementById('dogName').value || "你的狗狗";
-  const dob = new Date(document.getElementById('dob').value);
+  const dobInput = document.getElementById('dob').value;
   const size = document.getElementById('size').value;
 
-  if (!dob.getTime()) {
+  if (!dobInput) {
+    alert("請輸入出生日期！");
+    return;
+  }
+
+  const dob = new Date(dobInput);
+  if (isNaN(dob.getTime())) {
     alert("請輸入正確的出生日期！");
     return;
   }
 
-  // 計算狗狗實際年齡
   const today = new Date();
   let dogAge = today.getFullYear() - dob.getFullYear();
   const monthDiff = today.getMonth() - dob.getMonth();
   const dayDiff = today.getDate() - dob.getDate();
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) dogAge--;
 
-  // 依據體型換算人類年齡
+  let ageForCalc = dogAge < 1 ? 1 : dogAge;
+
   let humanAge;
-  if (size === "small") {
-    humanAge = 16 * Math.log(dogAge) + 31;
-  } else if (size === "medium") {
-    humanAge = 14 * Math.log(dogAge) + 32;
-  } else { // large
-    humanAge = 12 * Math.log(dogAge) + 34;
-  }
+  if (size === "small") humanAge = 16 * Math.log(ageForCalc) + 31;
+  else if (size === "medium") humanAge = 14 * Math.log(ageForCalc) + 32;
+  else humanAge = 12 * Math.log(ageForCalc) + 34;
 
   humanAge = humanAge < 0 ? 0 : Math.round(humanAge);
 
-  // 顯示結果
   const resultText = `
     <strong>${name}的狗狗年齡：</strong> ${dogAge} 歲<br>
     <strong>換算成人類年齡：</strong> ${humanAge} 歲
   `;
   document.getElementById('result').innerHTML = resultText;
 
-  // 儲存到 localStorage
   localStorage.setItem('lastResult', JSON.stringify({
-    name: name,
-    dob: document.getElementById('dob').value,
-    size: size,
-    dogAge: dogAge,
-    humanAge: humanAge
+    name,
+    dob: dobInput,
+    size,
+    dogAge,
+    humanAge
   }));
 }
 
-// 頁面載入時，顯示上一次運算結果
+function clearLastResult() {
+  localStorage.removeItem('lastResult');
+  document.getElementById('dogName').value = '';
+  document.getElementById('dob').value = '';
+  document.getElementById('size').value = 'small';
+  document.getElementById('result').innerHTML = '';
+}
+
 window.addEventListener('load', () => {
   const lastResult = JSON.parse(localStorage.getItem('lastResult'));
   if (lastResult) {
@@ -57,4 +64,3 @@ window.addEventListener('load', () => {
     `;
   }
 });
-
