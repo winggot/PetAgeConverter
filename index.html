@@ -6,34 +6,32 @@
   <title>寵物年齡計算器(狗狗)</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
-<div class="calculator">
-  <h2>🐾 狗狗年齡計算機 🐾</h2>
-  
-  <label for="dogName">狗狗名字：</label>
-  <input type="text" id="dogName" placeholder="妙麗">
-
-  <label for="dob">出生年月日：</label>
-  <input type="date" id="dob">
-
-  <label for="size">體型：</label>
-  <select id="size">
-    <option value="small">小型犬</option>
-    <option value="medium">中型犬</option>
-    <option value="large">大型犬</option>
-  </select>
-
-  <button onclick="calculateDogAge()">計算年齡</button>
-
-  <div id="result"></div>
-
-  <div class="features">
-    <h3>功能特色 🎉</h3>
-    <ul>
-      <li>可輸入狗狗名字和出生日期</li>
-      <li>支援「小型犬／中型犬／大型犬」三種體型</li>
-      <li>年齡換算公式參考 UCSD 基因甲基化研究 + AVMA 體型差異 + AAHA 年齡指引</li>
-      <li>即時顯示狗狗年齡與對應人類年齡</li>
-    </ul>
+<body>
+  <div class="calculator">
+    <h2>🐾 狗狗年齡計算機 🐾</h2>
+    <label for="dogName">狗狗名字：</label>
+    <input type="text" id="dogName" placeholder="妙麗">
+    <label for="dob">出生年月日：</label>
+    <input type="date" id="dob">
+    <label for="size">體型：</label>
+    <select id="size">
+      <option value="small">小型犬</option>
+      <option value="medium">中型犬</option>
+      <option value="large">大型犬</option>
+    </select>
+    <button onclick="calculateDogAge()">計算年齡</button>
+    <div id="result"></div>
+    <div class="features">
+      <h3>功能特色 🎉</h3>
+      <ul>
+        <li>可輸入狗狗名字和出生日期</li>
+        <li>支援「小型犬／中型犬／大型犬」三種體型</li>
+        <li>年齡換算公式參考 UCSD 基因甲基化研究 + AVMA 體型差異 + AAHA 年齡指引</li>
+        <li>即時顯示狗狗年齡與對應人類年齡</li>
+      </ul>
+    </div>
   </div>
-</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
